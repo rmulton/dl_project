@@ -10,4 +10,7 @@
 7. You're all set !
 
 ## References
-1. G. Papandreou et al., [*Towards Accurate Multi-person Pose Estimation in the Wild*](https://arxiv.org/pdf/1701.01779.pdf)
+### Papers on pose estimation
+- G. Papandreou et al., [*Towards Accurate Multi-person Pose Estimation in the Wild*](https://arxiv.org/pdf/1701.01779.pdf)
+### Datasets
+- [Common Objects in Context](http://cocodataset.org)
