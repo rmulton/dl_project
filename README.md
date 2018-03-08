@@ -8,3 +8,6 @@
 5. Run ```jupyter notebook mscoco_pose_estimation.ipynb```
 6. Change the Data location section variables to give the program the path to the dataset
 7. You're all set !
+
+## References
+1. G. Papandreou et al., [*Towards Accurate Multi-person Pose Estimation in the Wild*](https://arxiv.org/pdf/1701.01779.pdf)
