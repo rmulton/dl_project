@@ -48,7 +48,6 @@ def conf_training(resuming=False, *args):
         current_epoch = checkpoint['epoch']
         
         #Optimizer
-        #optimizer = load_state_dict(checkpoint['optimizer'])
         optimizer = torch.optim.Adam(net.parameters())
     
     #Data loaders

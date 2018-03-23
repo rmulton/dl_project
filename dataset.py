@@ -41,13 +41,11 @@ class MSCOCO(data.Dataset):
         # Load the image from the file
         img_path = os.path.join(self.images_folder, img['file_name'])
         img_array = load_image(img_path)
+        #img_filtered_path = os.path.join(self.images_folder, img['file_name']) #Change the past
+        #img_array_filtered = load_image(img_filtered_path)
         # Black and white images
-        if len(img_array.shape)==2:
-            # Add a channel axis
-            img_array = np.expand_dims(img_array, axis=2)
-            # Fill all the axes with the black&white image
-            img_array = np.concatenate((img_array, img_array, img_array), axis=2)
-        img_array = np.transpose(img_array, (2,1,0))
+        img_array = transformGreyImage(img_array)
+        #img_array_filtered = transformGreyImage(img_array_filtered)
         
         # Get the keypoints
         annIds = self.annotations.getAnnIds(imgIds=img['id'])
@@ -69,9 +67,24 @@ class MSCOCO(data.Dataset):
         # Transform arrays into tensors
         img_tensor = torch.from_numpy(img_array)
         img_tensor = img_tensor.float() # Pytorch needs a float tensor
+        #img_tensor_filtered = torch.from_numpy(img_array_filtered)
+        #img_tensor_filtered = img_tensor_filtered.fload()
+        #img_tensor_input = torch.cat((img_tensor,img_tensor_filtered),0)
         keypoints_tensor = torch.from_numpy(heatmaps_array).float() # Pytorch needs a float tensor
         
         return img_tensor, keypoints_tensor
+
+    @staticmethod
+    def transformGreyImage(img_array):
+        # Black and white images
+        if len(img_array.shape)==2:
+            # Add a channel axis
+            img_array = np.expand_dims(img_array, axis=2)
+            # Fill all the axes with the black&white image
+            img_array = np.concatenate((img_array, img_array, img_array), axis=2)
+        img_array = np.transpose(img_array, (2,1,0))
+        return img_array
+
 
 # Homemade image loader
 def load_image(image_path):

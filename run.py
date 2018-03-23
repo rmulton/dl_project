@@ -122,6 +122,7 @@ def launch_testing(model_epoch):
     checkpoint = torch.load(os.path.join(MAIN_FOLDER, model_epoch))
     net = Model()
     net.load_state_dict(checkpoint['state_dict'])
+    net.cuda()
 
     # Loss
     criterion = nn.MSELoss()
