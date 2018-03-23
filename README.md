@@ -5,9 +5,18 @@
 2. [Install Pytorch](http://pytorch.org/)
 3. Run ```cd ./dl_project/cocoapi/PythonAPI; python setup.py install; cd ../..``` to install the MSCOCO api
 4. Download and unzip MSCOCO 2017 dataset [annotations](http://images.cocodataset.org/annotations/annotations_trainval2017.zip), [training images](http://images.cocodataset.org/zips/train2017.zip) and [validation images](http://images.cocodataset.org/zips/val2017.zip)
-5. Run ```jupyter notebook mscoco_pose_estimation.ipynb```
-6. Change the Data location section variables to give the program the path to the dataset
-7. You're all set !
+
+## Launch using jupyter notebook
+1. Run ```jupyter notebook mscoco_pose_estimation.ipynb```
+2. Change the Data location section variables to give the program the path to the dataset
+3. You're all set !
+
+## Launch using python files
+Change the Data location section variables in the const.py file
+- To launch the training of a new model : python main.py train False
+- To launch the training over an existing model : python main.py train True <epochNumber>
+- To launch the test over the dataset with a trained model : python main.py test <epochNumber>
+
 
 ## References
 ### Papers on pose estimation
