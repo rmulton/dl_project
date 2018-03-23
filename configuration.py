@@ -8,13 +8,13 @@ from model import Model
 from const import IMAGES_FOLDER, ANNOTATION_FILE, MAIN_FOLDER
 from dataset import MSCOCO
 
-def conf_training(resuming=False, *args):
+def conf_training(resuming=False, input_type=0, *args):
     """Function that initiates the configuration of the model depending if a last model
        is loaded or if it's the beginning of a new model"""
     
     #Data
-    trainset = MSCOCO(IMAGES_FOLDER, ANNOTATION_FILE, train=True)
-    evalset = MSCOCO(IMAGES_FOLDER, ANNOTATION_FILE, evalu=True)
+    trainset = MSCOCO(IMAGES_FOLDER, ANNOTATION_FILE, train=True, input_type=input_type)
+    evalset = MSCOCO(IMAGES_FOLDER, ANNOTATION_FILE, evalu=True, input_type=input_type)
 
     # Loss
     criterion = nn.MSELoss()
@@ -28,7 +28,7 @@ def conf_training(resuming=False, *args):
     
     if not resuming:
         # Model
-        net = Model()
+        net = Model(input_type=input_type)
 
         # Optimizer
         optimizer = torch.optim.Adam(net.parameters())
@@ -41,7 +41,7 @@ def conf_training(resuming=False, *args):
         checkpoint = torch.load(os.path.join(MAIN_FOLDER,"model_"+args[0])) #Take the last file - Later the best saved model
         
         #Model
-        net = Model()
+        net = Model(input_type=input_type)
         net.load_state_dict(checkpoint['state_dict'])
         
         #Current_epoch

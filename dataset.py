@@ -10,11 +10,19 @@ from skimage.transform import resize
 class MSCOCO(data.Dataset):
     """ Represents a MSCOCO Keypoints dataset """
     
-    def __init__(self, images_folder, annotations_json, train=False, evalu=False):
+    def __init__(self, images_folder, annotations_json, train=False, evalu=False, input_type=0):
         """ Instantiate a MSCOCO dataset """
         super().__init__()
         
         self.images_folder = images_folder
+        #Input type indicates if the input is the original image or a combination of original image with filtered image
+        #O : original image
+        #1 : original image + skin filtered 
+        #2 : original image + edge filter 
+        #3 : original image + clustering filter 
+        #4 : orignal image + skin filter + edge filter
+        #5 : orignal image + skin filter + clustering filter
+        self.input_type = input_type
         
         # Load the annotations
         self.annotations = COCO(annotations_json)
@@ -34,19 +42,33 @@ class MSCOCO(data.Dataset):
     def __getitem__(self, index):
         """ Returns the index-th image with keypoints annotations, both as tensors """
         
+        #L is the list of the input's path for a single image
+        L = []
+        input_imgs = []
+
         # Get the image informations
         img_id = self.img_ids[index]
         img = self.annotations.loadImgs(img_id)[0]
         
         # Load the image from the file
         img_path = os.path.join(self.images_folder, img['file_name'])
-        img_array = load_image(img_path)
-        #img_filtered_path = os.path.join(self.images_folder, img['file_name']) #Change the past
-        #img_array_filtered = load_image(img_filtered_path)
-        # Black and white images
-        img_array = transformGreyImage(img_array)
-        #img_array_filtered = transformGreyImage(img_array_filtered)
+        L.append(img_path)
         
+        #Need to adapt it depending on the path of the filtered image
+        if self.input_type == 1 or self.input_type == 4 or self.input_type == 5:
+            L.append(img_path_skin_filered)
+        if self.input_type == 2 or self.input_type == 4:
+            L.append(img_path_edge_filtered)
+        if self.input_type == 3 or self.input_type == 5:
+            L.append(img_path_clustering_filer)
+        
+        for img in L:
+            img_array = load_image(img)
+            img_array = MSCOCO.transformGreyImage(img_array)
+            img_tensor = torch.from_numpy(img_array)
+            img_tensor = img_tensor.float() # Pytorch needs a float tensor
+            input_imgs.append(img_tensor)
+             
         # Get the keypoints
         annIds = self.annotations.getAnnIds(imgIds=img['id'])
         anns = self.annotations.loadAnns(annIds)
@@ -64,13 +86,9 @@ class MSCOCO(data.Dataset):
         # Generate the heatmaps
         heatmaps_array = heatmaps_from_keypoints(keypoints)
         
-        # Transform arrays into tensors
-        img_tensor = torch.from_numpy(img_array)
-        img_tensor = img_tensor.float() # Pytorch needs a float tensor
-        #img_tensor_filtered = torch.from_numpy(img_array_filtered)
-        #img_tensor_filtered = img_tensor_filtered.fload()
         #img_tensor_input = torch.cat((img_tensor,img_tensor_filtered),0)
         keypoints_tensor = torch.from_numpy(heatmaps_array).float() # Pytorch needs a float tensor
+        img_tensor = torch.cat(L,0)
         
         return img_tensor, keypoints_tensor
 

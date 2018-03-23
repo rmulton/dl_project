@@ -33,12 +33,23 @@ class ConvRelu(nn.Module):
 
 
 class Model(nn.Module):
-    def __init__(self):
+    def __init__(self, input_type=0):
         super().__init__()
         self.pool = nn.MaxPool2d(2)
-
+        
+        #1 image
+        if input_type == 0:
+            input_size = 3
+        
+        #2 images
+        elif input_type == 1 or input_type == 2 or input_type == 3:
+            input_size = 6
+        
+        #3 images
+        elif input_type == 4 or input_type == 5:
+            input_size = 9
         self.feature_extraction = nn.Sequential(
-                ConvRelu(3, 64, 3),
+                ConvRelu(input_size, 64, 3),
                 ConvRelu(64, 64, 3),
                 self.pool,
                 ConvRelu(64, 128, 3),
