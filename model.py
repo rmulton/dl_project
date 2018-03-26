@@ -43,11 +43,14 @@ class Model(nn.Module):
                 self.pool,
                 ConvRelu(64, 128, 3),
                 ConvRelu(128, 128, 3),
+                ConvRelu(128, 128, 3),
                 self.pool,
+                ConvRelu(128, 128, 3),
                 ConvRelu(128, 128, 3),
                 ConvRelu(128, 128, 3),
                 self.pool,
                 ConvRelu(128, 512, 3),
+                ConvRelu(512, 512, 3),
                 ConvRelu(512, 512, 3),
                 )
         
