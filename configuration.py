@@ -34,11 +34,7 @@ def conf_training(resuming=False, *args):
         optimizer = torch.optim.Adam(net.parameters())
         
         #First epoch
-        current_epoch = 0
-        
-        #Loss train and val setup
-        loss_train = []
-        loss_val = []
+        current_epoch = -1
     
     else:
         #Load the last saved model with its configurations
@@ -54,12 +50,6 @@ def conf_training(resuming=False, *args):
         #Optimizer
         #optimizer = load_state_dict(checkpoint['optimizer'])
         optimizer = torch.optim.Adam(net.parameters())
-        
-        #Loss train and val history
-        lossObject = open(os.path.join(MAIN_FOLDER,"loss_" + args[0]),'rb')  
-        loss_dic = pickle.load(lossObject)
-        loss_train = loss_dic['loss_train']
-        loss_val = loss_dic['loss_val']
     
     #Data loaders
     trainloader = torch.utils.data.DataLoader(trainset,
@@ -76,4 +66,4 @@ def conf_training(resuming=False, *args):
     
     evalset_length = len(evalset)
     
-    return epochs, trainloader, evaloader, optimizer, net, current_epoch, loss_train, loss_val, criterion, evalset_length, evalset
+    return epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset

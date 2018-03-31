@@ -12,15 +12,30 @@ from const import IMAGES_FOLDER, IMAGES_FOLDER_TEST, ANNOTATION_FILE_TEST, MAIN_
 from dataset import MSCOCO
 from configuration import conf_training
 
-def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, loss_train, loss_val, criterion, evalset_length, evalset):
-    loss_train = loss_train
-    loss_val = loss_val
+def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset):
     plt.ion()
-
-    for epoch in range(current_epoch + 1, epochs):  # loop over the dataset multiple times
+    if current_epoch == -1:
+        #If not resuming a model, creating the loss file
+        lossFile = open(os.path.join(MAIN_FOLDER,"loss"),'wb')
+        pickle.dump({"loss_train":{}, "loss_val":{}},lossFile)
+        lossFile.close()
+    
+    start_epoch = current_epoch + 1
+    for epoch in range(start_epoch, epochs):  # loop over the dataset multiple times
         print("Epoch number {}".format(epoch))
         plotKeypointsOverOutputModel(0,evalset,net,IMAGES_FOLDER)#Displaying the result over the first element of the evalset
         running_loss = 0.0
+
+        #For each epoch, we keep the loss under a dictionnary with epoch_nb as key and list of loss as value
+        lossFile = open(os.path.join(MAIN_FOLDER,"loss"),'rb')
+        loss_dic = pickle.load(lossFile)
+        lossFile.close()
+        lossFile = open(os.path.join(MAIN_FOLDER,"loss"),'wb')
+        loss_dic['loss_train'][epoch] = []
+        loss_dic['loss_val'][epoch] = []
+        pickle.dump(loss_dic,lossFile)
+        lossFile.close()
+
         for i, data in enumerate(trainloader, 0):
             print("Batch number {}".format(i))
             # get the inputs
@@ -38,13 +53,22 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, loss
             loss.backward()
             optimizer.step()
 
-            loss_train += [loss.data[0]] #Stock the loss on trainset for each mini-batches
+            #loss_train[epoch] += [loss.data[0]] #Stock the loss on trainset for each mini-batches
             # print statistics
             running_loss += loss.data[0]
             if i % 2000 == 1999:    # print every 2000 mini-batches
                 print('Trainset loss[%d, %5d] loss: %.3f' %
                       (epoch + 1, i + 1, running_loss / 2000))
                 running_loss = 0.0
+            
+            #Save the loss_train in disk for each batch
+            lossFile = open(os.path.join(MAIN_FOLDER,"loss"),'rb')  
+            loss_dic = pickle.load(lossFile)
+            lossFile.close()
+            lossFile = open(os.path.join(MAIN_FOLDER,"loss"),'wb')
+            loss_dic['loss_train'][epoch] += [loss.data[0]]
+            pickle.dump(loss_dic,lossFile)
+            lossFile.close()
         
         running_loss_eval = 0.0
         print("Starting Eval for Epoch {}".format(epoch))
@@ -62,8 +86,17 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, loss
             # print statistics
             running_loss_eval += loss.data[0]
 
+            #Save the loss_val in disk for each batch
+            lossFile = open(os.path.join(MAIN_FOLDER,"loss"),'rb')  
+            loss_dic = pickle.load(lossFile)
+            lossFile.close()
+            lossFile = open(os.path.join(MAIN_FOLDER,"loss"),'wb') 
+            loss_dic['loss_val'][epoch] += [loss.data[0]]
+            pickle.dump(loss_dic,lossFile)
+            lossFile.close()
+
         print("Evalset Loss for Epoch {0} : {1}".format(epoch,running_loss_eval/evalset_length))
-        loss_val += [running_loss_eval/evalset_length] #Stock the loss on evalset for each epoch
+        #loss_val[epoch] += [running_loss_eval/evalset_length] #Stock the loss on evalset for each epoch
         
         #Save the model
         state = {
@@ -71,20 +104,15 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, loss
             'state_dict': net.state_dict()
         }
         torch.save(state, os.path.join(MAIN_FOLDER,"model_"+str(epoch))) #Save the torch model after each epoch
-        
-        #Save the loss
-        loss_dic = {'loss_train':loss_train,'loss_val':loss_val}
-        lossFile = open(os.path.join(MAIN_FOLDER, "loss_"+str(epoch)),'ab')
-        pickle.dump(loss_dic,lossFile)
-        lossFile.close()
+    
         
 
     print('Finished Training')
 
 def launch_training(resuming=False, *args):
     """Function that configurates the model from init or a last model ; and then it trains the model"""
-    epochs, trainloader, evaloader, optimizer, net, current_epoch, loss_train, loss_val, criterion, evalset_length, evalset = conf_training(resuming, *args)
-    training(epochs, trainloader, evaloader, optimizer, net, current_epoch, loss_train, loss_val, criterion, evalset_length, evalset)
+    epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset = conf_training(resuming, *args)
+    training(epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset)
 
 def launch_testing(model_epoch):
     """Function that launches a model over the test dataset"""
