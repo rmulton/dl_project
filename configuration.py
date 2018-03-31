@@ -38,7 +38,7 @@ def conf_training(resuming=False, input_type=0, *args):
     
     else:
         #Load the last saved model with its configurations
-        checkpoint = torch.load(os.path.join(MAIN_FOLDER,"model_"+args[0])) #Take the last file - Later the best saved model
+        checkpoint = torch.load(os.path.join(MAIN_FOLDER,"model_"+args[0]))
         
         #Model
         net = Model(input_type=input_type)

@@ -42,6 +42,7 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
             inputs, labels = data
 
             # wrap them in Variable
+            print(inputs)
             inputs, labels = Variable(inputs), Variable(labels)
 
             # zero the parameter gradients
@@ -111,7 +112,7 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
 
 def launch_training(resuming=False, input_type=0, *args):
     """Function that configurates the model from init or a last model ; and then it trains the model"""
-    epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset = conf_training(resuming, *args)
+    epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset = conf_training(resuming=resuming,input_type=input_type, *args)
     training(epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset)
 
 def launch_testing(model_epoch, input_type=0):

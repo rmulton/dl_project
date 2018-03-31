@@ -28,10 +28,12 @@ class MSCOCO(data.Dataset):
         self.annotations = COCO(annotations_json)
         imgs_id = self.annotations.getImgIds()
         if train:
-            self.img_ids = imgs_id[:int(len(imgs_id)*2/3)]
+            #self.img_ids = imgs_id[:int(len(imgs_id)*2/3)]
+            self.img_ids = imgs_id[:5]
         
         elif evalu:
-            self.img_ids = imgs_id[int(len(imgs_id)*2/3)+1:]
+            #self.img_ids = imgs_id[int(len(imgs_id)*2/3)+1:]
+            self.img_ids = imgs_id[6:8]
         
         else:
             self.img_ids = imgs_id        
@@ -56,14 +58,14 @@ class MSCOCO(data.Dataset):
         
         #Need to adapt it depending on the path of the filtered image
         if self.input_type == 1 or self.input_type == 4 or self.input_type == 5:
-            L.append(img_path_skin_filered)
+            L.append(img_path) #Need to change with skin filtered image
         if self.input_type == 2 or self.input_type == 4:
-            L.append(img_path_edge_filtered)
+            L.append(img_path) #Need to change with edge filtered image
         if self.input_type == 3 or self.input_type == 5:
-            L.append(img_path_clustering_filer)
+            L.append(img_path) #Need to change with clustering filtered image
         
-        for img in L:
-            img_array = load_image(img)
+        for image in L:
+            img_array = load_image(image)
             img_array = MSCOCO.transformGreyImage(img_array)
             img_tensor = torch.from_numpy(img_array)
             img_tensor = img_tensor.float() # Pytorch needs a float tensor
@@ -88,7 +90,7 @@ class MSCOCO(data.Dataset):
         
         #img_tensor_input = torch.cat((img_tensor,img_tensor_filtered),0)
         keypoints_tensor = torch.from_numpy(heatmaps_array).float() # Pytorch needs a float tensor
-        img_tensor = torch.cat(L,0)
+        img_tensor = torch.cat(input_imgs,0)
         
         return img_tensor, keypoints_tensor
 
