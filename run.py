@@ -109,18 +109,18 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
 
     print('Finished Training')
 
-def launch_training(resuming=False, *args):
+def launch_training(resuming=False, input_type=0, *args):
     """Function that configurates the model from init or a last model ; and then it trains the model"""
-    epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset = conf_training(resuming, *args)
+    epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset = conf_training(resuming=resuming,input_type=input_type, *args)
     training(epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset)
 
-def launch_testing(model_epoch):
+def launch_testing(model_epoch, input_type=0):
     """Function that launches a model over the test dataset"""
-    testset = MSCOCO(IMAGES_FOLDER_TEST, ANNOTATION_FILE_TEST)
+    testset = MSCOCO(IMAGES_FOLDER_TEST, ANNOTATION_FILE_TEST,input_type=input_type)
 
     #Load the training model
     checkpoint = torch.load(os.path.join(MAIN_FOLDER, model_epoch))
-    net = Model()
+    net = Model(input_type=input_type)
     net.load_state_dict(checkpoint['state_dict'])
 
     # Loss

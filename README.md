@@ -13,9 +13,16 @@
 
 ## Launch using python files
 Change the Data location section variables in the const.py file
-- To launch the training of a new model : python main.py train False
-- To launch the training over an existing model : python main.py train True <epochNumber>
-- To launch the test over the dataset with a trained model : python main.py test <epochNumber>
+- To launch the training of a new model : python main.py train False <inputType>
+- To launch the training over an existing model : python main.py train True <inputType> <epochNumber>
+- To launch the test over the dataset with a trained model : python main.py test <epochNumber> <inputType>
+## InputType:
+O : original image
+1 : original image + skin filtered 
+2 : original image + edge filter 
+3 : original image + clustering filter 
+4 : orignal image + skin filter + edge filter
+5 : orignal image + skin filter + clustering filter
 
 
 ## References
