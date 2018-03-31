@@ -28,12 +28,10 @@ class MSCOCO(data.Dataset):
         self.annotations = COCO(annotations_json)
         imgs_id = self.annotations.getImgIds()
         if train:
-            #self.img_ids = imgs_id[:int(len(imgs_id)*2/3)]
-            self.img_ids = imgs_id[:5]
+            self.img_ids = imgs_id[:int(len(imgs_id)*2/3)]
         
         elif evalu:
-            #self.img_ids = imgs_id[int(len(imgs_id)*2/3)+1:]
-            self.img_ids = imgs_id[6:8]
+            self.img_ids = imgs_id[int(len(imgs_id)*2/3)+1:]
         
         else:
             self.img_ids = imgs_id        
