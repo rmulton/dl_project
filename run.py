@@ -42,7 +42,6 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
             inputs, labels = data
 
             # wrap them in Variable
-            print(inputs)
             inputs, labels = Variable(inputs), Variable(labels)
 
             # zero the parameter gradients
