@@ -69,7 +69,13 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
             pickle.dump(loss_dic,lossFile)
             lossFile.close()
         
+        #Save the model
+        state = {
+            'epoch': epoch,
+            'state_dict': net.state_dict()
+        }
         torch.save(state, os.path.join(MAIN_FOLDER,"model_"+str(epoch))) #Save the torch model after each epoch
+        
         running_loss_eval = 0.0
         print("Starting Eval for Epoch {}".format(epoch))
         for i, data in enumerate(evaloader, 0):
@@ -97,12 +103,6 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
 
         print("Evalset Loss for Epoch {0} : {1}".format(epoch,running_loss_eval/evalset_length))
         #loss_val[epoch] += [running_loss_eval/evalset_length] #Stock the loss on evalset for each epoch
-        
-        #Save the model
-        state = {
-            'epoch': epoch,
-            'state_dict': net.state_dict()
-        }
     
         
 
