@@ -23,12 +23,12 @@ def conf_training(resuming=False, input_type=0, *args):
     epochs = 10
 
     # Batch sizes
-    batch_size_train = 1
-    batch_size_val = 1
+    batch_size_train = 5
+    batch_size_val = 5
     
     if not resuming:
         # Model
-        net = Model(input_type=input_type)
+        net = Model(input_type=input_type).cuda()
 
         # Optimizer
         optimizer = torch.optim.Adam(net.parameters())
@@ -43,6 +43,7 @@ def conf_training(resuming=False, input_type=0, *args):
         #Model
         net = Model(input_type=input_type)
         net.load_state_dict(checkpoint['state_dict'])
+        net.cuda()
         
         #Current_epoch
         current_epoch = checkpoint['epoch']

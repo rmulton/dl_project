@@ -42,7 +42,7 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
             inputs, labels = data
 
             # wrap them in Variable
-            inputs, labels = Variable(inputs), Variable(labels)
+            inputs, labels = Variable(inputs).cuda(), Variable(labels).cuda()
 
             # zero the parameter gradients
             optimizer.zero_grad()
@@ -70,6 +70,7 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
             pickle.dump(loss_dic,lossFile)
             lossFile.close()
         
+        torch.save(state, os.path.join(MAIN_FOLDER,"model_"+str(epoch))) #Save the torch model after each epoch
         running_loss_eval = 0.0
         print("Starting Eval for Epoch {}".format(epoch))
         for i, data in enumerate(evaloader, 0):
@@ -77,7 +78,7 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
             inputs, labels = data
 
             # wrap them in Variable
-            inputs, labels = Variable(inputs), Variable(labels)
+            inputs, labels = Variable(inputs).cuda(), Variable(labels).cuda()
 
             # forward 
             outputs = net(inputs)
@@ -103,7 +104,6 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
             'epoch': epoch,
             'state_dict': net.state_dict()
         }
-        torch.save(state, os.path.join(MAIN_FOLDER,"model_"+str(epoch))) #Save the torch model after each epoch
     
         
 
