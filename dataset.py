@@ -42,55 +42,107 @@ class MSCOCO(data.Dataset):
     def __getitem__(self, index):
         """ Returns the index-th image with keypoints annotations, both as tensors """
         
-        #L is the list of the input's path for a single image
-        L = []
-        input_imgs = []
+        try:
+            #L is the list of the input's path for a single image
+            L = []
+            input_imgs = []
 
-        # Get the image informations
-        img_id = self.img_ids[index]
-        img = self.annotations.loadImgs(img_id)[0]
-        
-        # Load the image from the file
-        img_path = os.path.join(self.images_folder, img['file_name'])
-        L.append(img_path)
-        
-        #Need to adapt it depending on the path of the filtered image
-        if self.input_type == 1 or self.input_type == 4 or self.input_type == 5:
-            L.append(img_path) #Need to change with skin filtered image
-        if self.input_type == 2 or self.input_type == 4:
-            L.append(img_path) #Need to change with edge filtered image
-        if self.input_type == 3 or self.input_type == 5:
-            L.append(img_path) #Need to change with clustering filtered image
-        
-        for image in L:
-            img_array = load_image(image)
-            img_array = MSCOCO.transformGreyImage(img_array)
-            img_tensor = torch.from_numpy(img_array)
-            img_tensor = img_tensor.float() # Pytorch needs a float tensor
-            input_imgs.append(img_tensor)
-             
-        # Get the keypoints
-        annIds = self.annotations.getAnnIds(imgIds=img['id'])
-        anns = self.annotations.loadAnns(annIds)
-        # Some images do not contain any coco object, so anns = []
-        if len(anns)>0:
-            keypoints = anns[0]['keypoints'] # anns is a list with only one element
-        else:
-            # keypoints are not visible so 
-            keypoints = [0 for i in range(3*17)]
+            # Get the image informations
+            img_id = self.img_ids[index]
+            img = self.annotations.loadImgs(img_id)[0]
             
-        # Check to avoid errors
-        if len(keypoints)!=3*17:
-            print('Warning: Keypoints list for image {} has length {} instead of 17'.format(img_id, len(keypoints)))
-    
-        # Generate the heatmaps
-        heatmaps_array = heatmaps_from_keypoints(keypoints)
+            # Load the image from the file
+            img_path = os.path.join(self.images_folder, img['file_name'])
+            L.append(img_path)
+            
+            #Need to adapt it depending on the path of the filtered image
+            if self.input_type == 1 or self.input_type == 4 or self.input_type == 5:
+                L.append(img_path) #Need to change with skin filtered image
+            if self.input_type == 2 or self.input_type == 4:
+                L.append(img_path) #Need to change with edge filtered image
+            if self.input_type == 3 or self.input_type == 5:
+                L.append(img_path) #Need to change with clustering filtered image
+            
+            for image in L:
+                img_array = load_image(image)
+                img_array = MSCOCO.transformGreyImage(img_array)
+                img_tensor = torch.from_numpy(img_array)
+                img_tensor = img_tensor.float() # Pytorch needs a float tensor
+                input_imgs.append(img_tensor)
+                
+            # Get the keypoints
+            annIds = self.annotations.getAnnIds(imgIds=img['id'])
+            anns = self.annotations.loadAnns(annIds)
+            # Some images do not contain any coco object, so anns = []
+            if len(anns)>0:
+                keypoints = anns[0]['keypoints'] # anns is a list with only one element
+            else:
+                # keypoints are not visible so 
+                keypoints = [0 for i in range(3*17)]
+                
+            # Check to avoid errors
+            if len(keypoints)!=3*17:
+                print('Warning: Keypoints list for image {} has length {} instead of 17'.format(img_id, len(keypoints)))
         
-        #img_tensor_input = torch.cat((img_tensor,img_tensor_filtered),0)
-        keypoints_tensor = torch.from_numpy(heatmaps_array).float() # Pytorch needs a float tensor
-        img_tensor = torch.cat(input_imgs,0)
+            # Generate the heatmaps
+            heatmaps_array = heatmaps_from_keypoints(keypoints)
+            
+            #img_tensor_input = torch.cat((img_tensor,img_tensor_filtered),0)
+            keypoints_tensor = torch.from_numpy(heatmaps_array).float() # Pytorch needs a float tensor
+            img_tensor = torch.cat(input_imgs,0)
+            
+            return img_tensor, keypoints_tensor
+
+        except:
+            #L is the list of the input's path for a single image
+            L = []
+            input_imgs = []
+
+            # Get the image informations
+            img_id = 391895
+            img = self.annotations.loadImgs(img_id)[0]
+            
+            # Load the image from the file
+            img_path = os.path.join(self.images_folder, img['file_name'])
+            L.append(img_path)
+            
+            #Need to adapt it depending on the path of the filtered image
+            if self.input_type == 1 or self.input_type == 4 or self.input_type == 5:
+                L.append(img_path) #Need to change with skin filtered image
+            if self.input_type == 2 or self.input_type == 4:
+                L.append(img_path) #Need to change with edge filtered image
+            if self.input_type == 3 or self.input_type == 5:
+                L.append(img_path) #Need to change with clustering filtered image
+            
+            for image in L:
+                img_array = load_image(image)
+                img_array = MSCOCO.transformGreyImage(img_array)
+                img_tensor = torch.from_numpy(img_array)
+                img_tensor = img_tensor.float() # Pytorch needs a float tensor
+                input_imgs.append(img_tensor)
+                
+            # Get the keypoints
+            annIds = self.annotations.getAnnIds(imgIds=img['id'])
+            anns = self.annotations.loadAnns(annIds)
+            # Some images do not contain any coco object, so anns = []
+            if len(anns)>0:
+                keypoints = anns[0]['keypoints'] # anns is a list with only one element
+            else:
+                # keypoints are not visible so 
+                keypoints = [0 for i in range(3*17)]
+                
+            # Check to avoid errors
+            if len(keypoints)!=3*17:
+                print('Warning: Keypoints list for image {} has length {} instead of 17'.format(img_id, len(keypoints)))
         
-        return img_tensor, keypoints_tensor
+            # Generate the heatmaps
+            heatmaps_array = heatmaps_from_keypoints(keypoints)
+            
+            #img_tensor_input = torch.cat((img_tensor,img_tensor_filtered),0)
+            keypoints_tensor = torch.from_numpy(heatmaps_array).float() # Pytorch needs a float tensor
+            img_tensor = torch.cat(input_imgs,0)
+            
+            return img_tensor, keypoints_tensor 
 
     @staticmethod
     def transformGreyImage(img_array):
