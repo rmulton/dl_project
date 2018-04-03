@@ -23,7 +23,7 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
     start_epoch = current_epoch + 1
     for epoch in range(start_epoch, epochs):  # loop over the dataset multiple times
         print("Epoch number {}".format(epoch))
-        plotKeypointsOverOutputModel(0,evalset,net,IMAGES_FOLDER)#Displaying the result over the first element of the evalset
+        #plotKeypointsOverOutputModel(0,evalset,net,IMAGES_FOLDER)#Displaying the result over the first element of the evalset
         running_loss = 0.0
 
         #For each epoch, we keep the loss under a dictionnary with epoch_nb as key and list of loss as value
@@ -53,7 +53,6 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
             loss.backward()
             optimizer.step()
 
-            #loss_train[epoch] += [loss.data[0]] #Stock the loss on trainset for each mini-batches
             # print statistics
             running_loss += loss.data[0]
             if i % 2000 == 1999:    # print every 2000 mini-batches
