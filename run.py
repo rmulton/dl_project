@@ -70,12 +70,14 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
             lossFile.close()
         
         #Save the model
+        net.cpu()
         state = {
             'epoch': epoch,
             'state_dict': net.state_dict()
         }
         torch.save(state, os.path.join(MAIN_FOLDER,"model_"+str(epoch))) #Save the torch model after each epoch
         
+        net.cuda()
         running_loss_eval = 0.0
         print("Starting Eval for Epoch {}".format(epoch))
         for i, data in enumerate(evaloader, 0):
