@@ -14,23 +14,28 @@ from configuration import conf_training
 
 def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset):
     plt.ion()
-    if current_epoch == -1:
-        #If not resuming a model, creating the loss file
-        lossFile = open(os.path.join(MAIN_FOLDER,"loss"),'wb')
-        pickle.dump({"loss_train":{}, "loss_val":{}},lossFile)
-        lossFile.close()
+    # if current_epoch == -1:
+    #     #If not resuming a model, creating the loss file
+    #     lossFile = open(os.path.join(MAIN_FOLDER,"loss"),'wb')
+    #     pickle.dump({"loss_train":{}, "loss_val":{}},lossFile)
+    #     lossFile.close()
     
     start_epoch = current_epoch + 1
     for epoch in range(start_epoch, epochs):  # loop over the dataset multiple times
         print("Epoch number {}".format(epoch))
+
+        lossFile = open(os.path.join(MAIN_FOLDER,"loss"+str(epoch)),'wb')
+        pickle.dump({"loss_train":{}, "loss_val":{}},lossFile)
+        lossFile.close()
+
         #plotKeypointsOverOutputModel(0,evalset,net,IMAGES_FOLDER)#Displaying the result over the first element of the evalset
         running_loss = 0.0
 
         #For each epoch, we keep the loss under a dictionnary with epoch_nb as key and list of loss as value
-        lossFile = open(os.path.join(MAIN_FOLDER,"loss"),'rb')
+        lossFile = open(os.path.join(MAIN_FOLDER,"loss"+str(epoch)),'rb')
         loss_dic = pickle.load(lossFile)
         lossFile.close()
-        lossFile = open(os.path.join(MAIN_FOLDER,"loss"),'wb')
+        lossFile = open(os.path.join(MAIN_FOLDER,"loss"+str(epoch)),'wb')
         loss_dic['loss_train'][epoch] = []
         loss_dic['loss_val'][epoch] = []
         pickle.dump(loss_dic,lossFile)
@@ -61,10 +66,10 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
                 running_loss = 0.0
             
             #Save the loss_train in disk for each batch
-            lossFile = open(os.path.join(MAIN_FOLDER,"loss"),'rb')  
+            lossFile = open(os.path.join(MAIN_FOLDER,"loss"+str(epoch)),'rb')
             loss_dic = pickle.load(lossFile)
             lossFile.close()
-            lossFile = open(os.path.join(MAIN_FOLDER,"loss"),'wb')
+            lossFile = open(os.path.join(MAIN_FOLDER,"loss"+str(epoch)),'wb')
             loss_dic['loss_train'][epoch] += [loss.data[0]]
             pickle.dump(loss_dic,lossFile)
             lossFile.close()
