@@ -28,10 +28,12 @@ class MSCOCO(data.Dataset):
         self.annotations = COCO(annotations_json)
         imgs_id = self.annotations.getImgIds()
         if train:
-            self.img_ids = imgs_id[:int(len(imgs_id)*2/3)]
+            #self.img_ids = imgs_id[:int(len(imgs_id)*2/3)]
+            self.img_ids = imgs_id[:10]
         
         elif evalu:
-            self.img_ids = imgs_id[int(len(imgs_id)*2/3)+1:]
+            #self.img_ids = imgs_id[int(len(imgs_id)*2/3)+1:]
+            self.img_ids = imgs_id[11:16]
         
         else:
             self.img_ids = imgs_id        
@@ -78,6 +80,7 @@ class MSCOCO(data.Dataset):
                 keypoints = anns[0]['keypoints'] # anns is a list with only one element
             else:
                 # keypoints are not visible so 
+                print("not visible")
                 keypoints = [0 for i in range(3*17)]
                 
             # Check to avoid errors
