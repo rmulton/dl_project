@@ -52,17 +52,17 @@ class Model(nn.Module):
                 ConvRelu(input_size, 64, 3),
                 ConvRelu(64, 64, 3),
                 self.pool,
+                ConvRelu(64, 64, 3),
+                ConvRelu(64, 64, 3),
+                self.pool,
                 ConvRelu(64, 128, 3),
-                #ConvRelu(128, 128, 3),
-                self.pool,
                 ConvRelu(128, 128, 3),
-                #ConvRelu(128, 128, 3),
                 self.pool,
-                ConvRelu(128, 512, 3),
-                #ConvRelu(512, 512, 3),
+                ConvRelu(128, 256, 3),
+                ConvRelu(256, 256, 3),
                 )
         
-        self.features_to_heatmaps = nn.Conv2d(512, 17, 1) # 17 kind of joints, 17 heatmaps
+        self.features_to_heatmaps = nn.Conv2d(256, 17, 1) # 17 kind of joints, 17 heatmaps
 
     def forward(self, x):
         x = self.feature_extraction(x)

@@ -18,17 +18,18 @@ def conf_training(resuming=False, input_type=0, *args):
 
     # Loss
     criterion = nn.MSELoss()
+    #criterion = nn.CrossEntropyLoss()
     
     # Number of epochs
     epochs = 10
 
     # Batch sizes
-    batch_size_train = 3
-    batch_size_val = 3
+    batch_size_train = 32
+    batch_size_val = 32
     
     if not resuming:
         # Model
-        net = Model(input_type=input_type).cuda()
+        net = Model(input_type=input_type)
 
         # Optimizer
         optimizer = torch.optim.Adam(net.parameters())
@@ -43,7 +44,6 @@ def conf_training(resuming=False, input_type=0, *args):
         #Model
         net = Model(input_type=input_type)
         net.load_state_dict(checkpoint['state_dict'])
-        net.cuda()
         
         #Current_epoch
         current_epoch = checkpoint['epoch']
