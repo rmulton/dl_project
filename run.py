@@ -120,7 +120,7 @@ def launch_training(resuming=False, input_type=0, *args):
     print(resuming)
     print(input_type)
     print(args[0])
-    epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset = conf_training(resuming=resuming, input_type=input_type, args[0])
+    epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset = conf_training(resuming=resuming, input_type=input_type, *args)
     training(epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset)
 
 def launch_testing(model_epoch, input_type=0):
