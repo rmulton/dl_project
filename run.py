@@ -47,8 +47,8 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
             inputs, labels = data
 
             # wrap them in Variable
-            inputs, labels = Variable(inputs), Variable(labels)
-            # inputs, labels = Variable(inputs).cuda(), Variable(labels).cuda()
+            # inputs, labels = Variable(inputs), Variable(labels)
+            inputs, labels = Variable(inputs).cuda(), Variable(labels).cuda()
 
             # zero the parameter gradients
             optimizer.zero_grad()
