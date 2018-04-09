@@ -4,6 +4,7 @@ from run import launch_training, launch_testing
 
 if __name__ == '__main__':
     args = sys.argv
+    print(args)
     if args[1] == 'train':
         if args[2] == "True":
             launch_training(True,int(args[3]),args[4]) #args[3] is the input_type parameter

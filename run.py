@@ -47,7 +47,8 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
             inputs, labels = data
 
             # wrap them in Variable
-            inputs, labels = Variable(inputs).cuda(), Variable(labels).cuda()
+            inputs, labels = Variable(inputs), Variable(labels)
+            # inputs, labels = Variable(inputs).cuda(), Variable(labels).cuda()
 
             # zero the parameter gradients
             optimizer.zero_grad()
@@ -119,7 +120,7 @@ def launch_training(resuming=False, input_type=0, *args):
     """Function that configurates the model from init or a last model ; and then it trains the model"""
     print(resuming)
     print(input_type)
-    print(args[0])
+
     epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset = conf_training(resuming=resuming, input_type=input_type, *args)
     training(epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset)
 

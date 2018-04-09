@@ -29,7 +29,8 @@ def conf_training(resuming=False, input_type=0, *args):
     
     if not resuming:
         # Model
-        net = Model(input_type=input_type).cuda()
+        net = Model(input_type=input_type)
+        # net = Model(input_type=input_type).cuda()
 
         # Optimizer
         optimizer = torch.optim.Adam(net.parameters())
@@ -42,7 +43,8 @@ def conf_training(resuming=False, input_type=0, *args):
         checkpoint = torch.load(os.path.join(MAIN_FOLDER,"model_"+args[0]))
         
         #Model
-        net = Model(input_type=input_type).cuda()
+        net = Model(input_type=input_type)
+        # net = Model(input_type=input_type).cuda()
         net.load_state_dict(checkpoint['state_dict'])
         
         #Current_epoch
