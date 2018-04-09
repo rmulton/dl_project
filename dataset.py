@@ -80,7 +80,6 @@ class MSCOCO(data.Dataset):
                 keypoints = anns[0]['keypoints'] # anns is a list with only one element
             else:
                 # keypoints are not visible so 
-                print("not visible")
                 keypoints = [0 for i in range(3*17)]
                 
             # Check to avoid errors
