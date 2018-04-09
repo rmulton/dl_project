@@ -100,10 +100,10 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
             running_loss_eval += loss.data[0]
 
             #Save the loss_val in disk for each batch
-            lossFile = open(os.path.join(MAIN_FOLDER,"loss"),'rb')  
+            lossFile = open(os.path.join(MAIN_FOLDER,"loss"+str(epoch))),'rb')  
             loss_dic = pickle.load(lossFile)
             lossFile.close()
-            lossFile = open(os.path.join(MAIN_FOLDER,"loss"),'wb') 
+            lossFile = open(os.path.join(MAIN_FOLDER,"loss"+str(epoch))),'wb') 
             loss_dic['loss_val'][epoch] += [loss.data[0]]
             pickle.dump(loss_dic,lossFile)
             lossFile.close()
