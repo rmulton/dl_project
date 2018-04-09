@@ -24,8 +24,8 @@ def conf_training(resuming=False, input_type=0, *args):
     epochs = 10
 
     # Batch sizes
-    batch_size_train = 1
-    batch_size_val = 1
+    batch_size_train = 25
+    batch_size_val = 25
     
     if not resuming:
         # Model
