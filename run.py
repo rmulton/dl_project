@@ -31,7 +31,7 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
         #plotKeypointsOverOutputModel(0,evalset,net,IMAGES_FOLDER)#Displaying the result over the first element of the evalset
         running_loss = 0.0
 
-        #For each epoch, we keep the loss under a dictionnary with epoch_nb as key and list of loss as value
+        #For each epoch, we keep the loss under a dictionnary with epoch_nb as key and list of loss as value ;
         lossFile = open(os.path.join(MAIN_FOLDER,"loss"+str(epoch)),'rb')
         loss_dic = pickle.load(lossFile)
         lossFile.close()
