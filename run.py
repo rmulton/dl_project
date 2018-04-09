@@ -103,7 +103,7 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
             lossFile = open(os.path.join(MAIN_FOLDER,"loss"+str(epoch))),'rb')  
             loss_dic = pickle.load(lossFile)
             lossFile.close()
-            lossFile = open(os.path.join(MAIN_FOLDER,"loss"+str(epoch))),'wb') 
+            lossFile = open(os.path.join(MAIN_FOLDER,"loss"+str(epoch)),'wb') 
             loss_dic['loss_val'][epoch] += [loss.data[0]]
             pickle.dump(loss_dic,lossFile)
             lossFile.close()
