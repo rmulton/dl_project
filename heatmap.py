@@ -29,7 +29,7 @@ def gaussian_heatmap(shape, keypoint_coordinates, std = 1.5):
     heatmap = np.expand_dims(heatmap_raw, axis=0)
     return heatmap
 
-def gaussian_heatmaps(xs, ys, vs, shape=32, image_height=512, image_width=640, std=1.):
+def gaussian_heatmaps(xs, ys, vs, image_width, image_height, shape=32, std=1.):
     """
         Computes heatmaps from the keypoints
         :param xs: Array of x coordinates for the keypoints
@@ -75,7 +75,7 @@ def keypoints_from_heatmap(heatmap):
     elif len(keypoints) == 3:
         return keypoints[2][0], keypoints[1][0], max_heatmap
 
-def keypoints_from_heatmaps(heatmaps, shape=32, image_height=512, image_width=640):
+def keypoints_from_heatmaps(heatmaps, shape=32, image_height=256, image_width=256):
     """Get the coordinates of the keypoints from the 17 heatmaps"""
     keypoints = []
     for i, heatmap in enumerate(heatmaps):
