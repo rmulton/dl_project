@@ -96,7 +96,7 @@ def get_xs_ys_vs(keypoints):
     vs = np.take(keypoints_array, [3*i+2 for i in range(17)])
     return xs, ys, vs
 
-def heatmaps_from_keypoints(keypoints):
+def heatmaps_from_keypoints(keypoints, width, height):
     xs, ys, vs = get_xs_ys_vs(keypoints)
-    heatmaps = gaussian_heatmaps(xs, ys, vs)
+    heatmaps = gaussian_heatmaps(xs, ys, vs, width, height)
     return heatmaps
