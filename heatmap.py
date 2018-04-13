@@ -52,7 +52,10 @@ def gaussian_heatmaps(xs, ys, vs, image_width, image_height, shape=32, std=1.):
     
     
     # Render a heatmap for each joint
-    heatmaps = gaussian_heatmap(shape, (xs[0],ys[0]))
+    if vs[0]!=0:
+        heatmaps = gaussian_heatmap(shape, (xs[0],ys[0]))
+    else:
+        heatmaps = np.zeros((1, shape, shape))
     for i, v in enumerate(vs):
         if i!=0:
             # If the joint is visible, generate a heatmaps
