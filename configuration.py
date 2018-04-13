@@ -8,7 +8,7 @@ from model import Model
 from const import IMAGES_FOLDER, ANNOTATION_FILE, MAIN_FOLDER
 from dataset import MSCOCO
 
-def conf_training(resuming=False, input_type=0, *args):
+def conf_training(resuming=False, input_type=0, path_model=""):
     """Function that initiates the configuration of the model depending if a last model
        is loaded or if it's the beginning of a new model"""
     
@@ -40,7 +40,7 @@ def conf_training(resuming=False, input_type=0, *args):
     
     else:
         #Load the last saved model with its configurations
-        checkpoint = torch.load(os.path.join(MAIN_FOLDER,"model_"+args[0]))
+        checkpoint = torch.load(os.path.join(MAIN_FOLDER,"model_"+path_model))
         
         #Model
         # net = Model(input_type=input_type)
