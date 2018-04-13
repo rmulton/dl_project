@@ -99,8 +99,8 @@ class MSCOCO(data.Dataset):
             
             return img_tensor, keypoints_tensor
 
-        except:
-            print("Dataloading image and keypoints failed")
+        """except:
+            print("Dataloading image and keypoints failed for img_id {}".format(self.img_ids[index]))
             #L is the list of the input's path for a single image
             L = []
             input_imgs = []
@@ -149,7 +149,7 @@ class MSCOCO(data.Dataset):
             keypoints_tensor = torch.from_numpy(heatmaps_array).float() # Pytorch needs a float tensor
             img_tensor = torch.cat(input_imgs,0)
             
-            return img_tensor, keypoints_tensor 
+            return img_tensor, keypoints_tensor """
 
     @staticmethod
     def transformGreyImage(img_array):
