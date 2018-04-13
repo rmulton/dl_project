@@ -60,13 +60,13 @@ class MSCOCO(data.Dataset):
             
             #Need to adapt it depending on the path of the filtered image
             if self.input_type == 1 or self.input_type == 4 or self.input_type == 5:
-                img_path = os.path.join(MAIN_FOLDER, 'skin', img['file_name'][:-4],"_skin.jpg")
+                img_path = os.path.join(MAIN_FOLDER, 'skin', img['file_name'][:-4]+"_skin.jpg")
                 L.append(img_path)
             if self.input_type == 2 or self.input_type == 4:
-                img_path = os.path.join(MAIN_FOLDER, 'edge', img['file_name'][:-4], "_edge.jpg")
+                img_path = os.path.join(MAIN_FOLDER, 'edge', img['file_name'][:-4]+ "_edge.jpg")
                 L.append(img_path)
             if self.input_type == 3 or self.input_type == 5:
-                img_path = os.path.join(MAIN_FOLDER, 'cluster', img['file_name'][:-4], "_cluster.jpg")
+                img_path = os.path.join(MAIN_FOLDER, 'cluster', img['file_name'][:-4]+ "_cluster.jpg")
                 L.append(img_path)
             
             for image in L:
