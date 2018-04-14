@@ -25,7 +25,7 @@ def conf_training(resuming=False, input_type=0, path_model=""):
 
     # Batch sizes
     batch_size_train = 25
-    batch_size_val = 25
+    batch_size_val = 2
     
     if not resuming:
         # Model
