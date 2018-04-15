@@ -60,13 +60,13 @@ class MSCOCO(data.Dataset):
             
             #Need to adapt it depending on the path of the filtered image
             if self.input_type == 1 or self.input_type == 4 or self.input_type == 5:
-                img_path = os.path.join(MAIN_FOLDER, 'skin', img['file_name'][:-4],"_skin.jpg")
+                img_path = os.path.join(MAIN_FOLDER, 'skin', img['file_name'][:-4]+"_skin.jpg")
                 L.append(img_path)
             if self.input_type == 2 or self.input_type == 4:
-                img_path = os.path.join(MAIN_FOLDER, 'edge', img['file_name'][:-4], "_edge.jpg")
+                img_path = os.path.join(MAIN_FOLDER, 'edge', img['file_name'][:-4]+ "_edge.jpg")
                 L.append(img_path)
             if self.input_type == 3 or self.input_type == 5:
-                img_path = os.path.join(MAIN_FOLDER, 'cluster', img['file_name'][:-4], "_cluster.jpg")
+                img_path = os.path.join(MAIN_FOLDER, 'cluster', img['file_name'][:-4]+ "_cluster.jpg")
                 L.append(img_path)
             
             for image in L:
@@ -91,7 +91,7 @@ class MSCOCO(data.Dataset):
                 print('Warning: Keypoints list for image {} has length {} instead of 17'.format(img_id, len(keypoints)))
         
             # Generate the heatmaps
-            heatmaps_array = heatmaps_from_keypoints(keypoints)
+            heatmaps_array = heatmaps_from_keypoints(keypoints, img['width'], img['height'])
             
             #img_tensor_input = torch.cat((img_tensor,img_tensor_filtered),0)
             keypoints_tensor = torch.from_numpy(heatmaps_array).float() # Pytorch needs a float tensor
@@ -100,6 +100,7 @@ class MSCOCO(data.Dataset):
             return img_tensor, keypoints_tensor
 
         except:
+            print("Dataloading image and keypoints failed")
             #L is the list of the input's path for a single image
             L = []
             input_imgs = []
@@ -114,11 +115,14 @@ class MSCOCO(data.Dataset):
             
             #Need to adapt it depending on the path of the filtered image
             if self.input_type == 1 or self.input_type == 4 or self.input_type == 5:
-                L.append(img_path) #Need to change with skin filtered image
+                img_path = os.path.join(MAIN_FOLDER, 'skin', img['file_name'][:-4]+"_skin.jpg")
+                L.append(img_path)
             if self.input_type == 2 or self.input_type == 4:
-                L.append(img_path) #Need to change with edge filtered image
+                img_path = os.path.join(MAIN_FOLDER, 'edge', img['file_name'][:-4]+ "_edge.jpg")
+                L.append(img_path)
             if self.input_type == 3 or self.input_type == 5:
-                L.append(img_path) #Need to change with clustering filtered image
+                img_path = os.path.join(MAIN_FOLDER, 'cluster', img['file_name'][:-4]+ "_cluster.jpg")
+                L.append(img_path)
             
             for image in L:
                 img_array = load_image(image)
@@ -142,7 +146,7 @@ class MSCOCO(data.Dataset):
                 print('Warning: Keypoints list for image {} has length {} instead of 17'.format(img_id, len(keypoints)))
         
             # Generate the heatmaps
-            heatmaps_array = heatmaps_from_keypoints(keypoints)
+            heatmaps_array = heatmaps_from_keypoints(keypoints,img['width'], img['height'])
             
             #img_tensor_input = torch.cat((img_tensor,img_tensor_filtered),0)
             keypoints_tensor = torch.from_numpy(heatmaps_array).float() # Pytorch needs a float tensor

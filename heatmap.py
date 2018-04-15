@@ -29,7 +29,7 @@ def gaussian_heatmap(shape, keypoint_coordinates, std = 1.5):
     heatmap = np.expand_dims(heatmap_raw, axis=0)
     return heatmap
 
-def gaussian_heatmaps(xs, ys, vs, shape=32, image_height=512, image_width=640, std=1.):
+def gaussian_heatmaps(xs, ys, vs, image_width, image_height, shape=32, std=1.):
     """
         Computes heatmaps from the keypoints
         :param xs: Array of x coordinates for the keypoints
@@ -52,7 +52,10 @@ def gaussian_heatmaps(xs, ys, vs, shape=32, image_height=512, image_width=640, s
     
     
     # Render a heatmap for each joint
-    heatmaps = gaussian_heatmap(shape, (xs[0],ys[0]))
+    if vs[0]!=0:
+        heatmaps = gaussian_heatmap(shape, (xs[0],ys[0]))
+    else:
+        heatmaps = np.zeros((1, shape, shape))
     for i, v in enumerate(vs):
         if i!=0:
             # If the joint is visible, generate a heatmaps
@@ -75,7 +78,7 @@ def keypoints_from_heatmap(heatmap):
     elif len(keypoints) == 3:
         return keypoints[2][0], keypoints[1][0], max_heatmap
 
-def keypoints_from_heatmaps(heatmaps, shape=32, image_height=512, image_width=640):
+def keypoints_from_heatmaps(heatmaps, shape=32, image_height=256, image_width=256):
     """Get the coordinates of the keypoints from the 17 heatmaps"""
     keypoints = []
     for i, heatmap in enumerate(heatmaps):
@@ -96,7 +99,7 @@ def get_xs_ys_vs(keypoints):
     vs = np.take(keypoints_array, [3*i+2 for i in range(17)])
     return xs, ys, vs
 
-def heatmaps_from_keypoints(keypoints):
+def heatmaps_from_keypoints(keypoints, width, height):
     xs, ys, vs = get_xs_ys_vs(keypoints)
-    heatmaps = gaussian_heatmaps(xs, ys, vs)
+    heatmaps = gaussian_heatmaps(xs, ys, vs, width, height)
     return heatmaps

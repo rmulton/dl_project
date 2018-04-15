@@ -116,9 +116,9 @@ def training(epochs, trainloader, evaloader, optimizer, net, current_epoch, crit
 
     print('Finished Training')
 
-def launch_training(resuming=False, input_type=0, *args):
+def launch_training(resuming=False, input_type=0, path_model=""):
     """Function that configurates the model from init or a last model ; and then it trains the model"""
-    epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset = conf_training(resuming=resuming, input_type=input_type, *args)
+    epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset = conf_training(resuming=resuming, input_type=input_type, path_model=path_model)
     training(epochs, trainloader, evaloader, optimizer, net, current_epoch, criterion, evalset_length, evalset)
 
 def launch_testing(model_epoch, input_type=0):
