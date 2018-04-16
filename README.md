@@ -6,6 +6,16 @@
 3. Run ```cd ./dl_project/cocoapi/PythonAPI; python setup.py install; cd ../..``` to install the MSCOCO api
 4. Download and unzip MSCOCO 2017 dataset [annotations](http://images.cocodataset.org/annotations/annotations_trainval2017.zip), [training images](http://images.cocodataset.org/zips/train2017.zip) and [validation images](http://images.cocodataset.org/zips/val2017.zip)
 
+## Composition of the reposetory
+- configuration.py : the parameters of the model
+- const.py : data location constants
+- dataset.py : construction of the dataset used for the training and testing of the model
+- datasets_preparation : computer vision algorithm applied to the dataset
+- heatmap.py : generation of heatmap from keypoints coordinates
+- model.py : deeplearning model configuration
+- run.py : the training and testing iterations
+- main.py 
+
 ## Launch using jupyter notebook
 1. Run ```jupyter notebook mscoco_pose_estimation.ipynb```
 2. Change the Data location section variables to give the program the path to the dataset
